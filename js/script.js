@@ -10,8 +10,9 @@ const setAttr = (elem, attr, name) => {
     elem.setAttribute(attr, name);
 }
 
-//Append Other Option to DOM
-
+//If JavaScript is turned on other option appears on DOM
+const otherOption = document.querySelector('.is-hidden');
+otherOption.classList.remove('is-hidden');
 
 //If other is selected add a textarea box
 jobRoleSelect.addEventListener('change', (e) => {
