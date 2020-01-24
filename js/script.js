@@ -70,3 +70,15 @@ for (let i = 0; i < colors.length; i++) {
     }
   });
 }
+
+//Grab checkbox element
+const checkbox = document.querySelector('.activities input');
+const checkBoxDate = checkbox.getAttribute('data-day-and-time');
+console.log(checkBoxDate);
+
+checkbox.addEventListener('click', e => {
+  const click = e.target;
+  for (let i = 0; i < checkbox.length; i++) {
+    console.log(checkbox[i])
+  }
+})
