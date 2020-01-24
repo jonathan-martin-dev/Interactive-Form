@@ -1,8 +1,9 @@
 /* Helper Functions */
 //Set Attribute helper function
 const setAttr = (elem, attr, name) => {
-    elem.setAttribute(attr, name);
-}
+  elem.setAttribute(attr, name);
+};
+/* Helper Functions */
 
 //First form field is focused on load
 const focusOnLoad = document.querySelector('#name');
@@ -16,36 +17,56 @@ const otherOption = document.querySelector('.is-hidden');
 otherOption.classList.remove('is-hidden');
 
 //If other is selected add a textarea box
-jobRoleSelect.addEventListener('change', (e) => {
-    const selectedElement = e.target.value;
-    if (selectedElement === 'other') {
-        const fieldset = document.getElementsByTagName('fieldset')[0];
-        const textArea = document.createElement('textarea');
-        textArea.style.display = 'block';
-        setAttr(textArea, 'id', 'other-title');
-        setAttr(textArea, 'placeholder', 'Your Job Role');
-        fieldset.append(textArea);
-    }
+jobRoleSelect.addEventListener('change', e => {
+  const selectedElement = e.target.value;
+  if (selectedElement === 'other') {
+    const fieldset = document.getElementsByTagName('fieldset')[0];
+    const textArea = document.createElement('textarea');
+    textArea.style.display = 'block';
+    setAttr(textArea, 'id', 'other-title');
+    setAttr(textArea, 'placeholder', 'Your Job Role');
+    fieldset.append(textArea);
+  }
 });
 
-//Set Color options to be hidden
-const colorSelect = document.querySelector('#color');
-const colors = colorSelect.children;
+//Hide Select T-Shirt from Color Select Menu
+selectShirtOption = document.querySelector('option[value="tshirttheme"]');
+setAttr(selectShirtOption, 'hidden', true);
 
-colors[0].textContent = 'Please Select a T-Shirt';
+//Set Color options to be hidden unless change event
+const selectColorsElement = document.querySelector('#color');
+const colors = selectColorsElement.children;
+console.log(colors);
+
+//Grab all colors options
+const cornflowerblue = document.querySelector('option[value="cornflowerblue"]');
+const darkslategrey = document.querySelector('option[value="darkslategrey"]');
+const gold = document.querySelector('option[value="gold"]');
+const tomato = document.querySelector('option[value="tomato"]');
+const steelblue = document.querySelector('option[value="steelblue"]');
+const dimgrey = document.querySelector('option[value="dimgrey"]');
+//Loop through all of the color options
 for (let i = 0; i < colors.length; i++) {
-    setAttr(colors[i], 'hidden', true);
-
-    const selectDesign = document.querySelector('#design');
-    selectDesign.addEventListener('change', (e) => {
-        const selectDesign = e.target.value;
-        if (selectDesign === 'js puns') {
-            if (colors[i].value === 'cornflowerblue' || colors[i].value === 'darkslategrey' || colors[i].value === 'gold') {
-               setAttr(colors[i], 'hidden', false);
-            }
-        }
-
-    });
+  colors[i].style.display = 'none';
+  const selectDesign = document.querySelector('#design');
+  selectDesign.addEventListener('change', e => {
+    const selectDesign = e.target.value;
+    //If the design selected has a value of "js puns" then show a set of items
+    if (selectDesign === 'js puns') {
+      cornflowerblue.style.display = '';
+      darkslategrey.style.display = '';
+      gold.style.display = '';
+      tomato.style.display = 'none';
+      steelblue.style.display = 'none';
+      dimgrey.style.display = 'none';
+      //If the design selected has a value of "heart js" then show a set of items
+    } else if (selectDesign === 'heart js') {
+      cornflowerblue.style.display = 'none';
+      darkslategrey.style.display = 'none';
+      gold.style.display = 'none';
+      tomato.style.display = '';
+      steelblue.style.display = '';
+      dimgrey.style.display = '';
+    }
+  });
 }
-
-
