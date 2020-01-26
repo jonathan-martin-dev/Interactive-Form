@@ -71,14 +71,19 @@ for (let i = 0; i < colors.length; i++) {
   });
 }
 
-//Grab checkbox element
-const checkbox = document.querySelector('.activities input');
-const checkBoxDate = checkbox.getAttribute('data-day-and-time');
-console.log(checkBoxDate);
+//Grab checkbox element attributes
+const activities = document.querySelector('.activities');
+const checkboxes = document.querySelector('.activities input');
+const checkBoxDate = checkboxes.getAttribute('data-day-and-time');
+const checkBoxAmount = checkboxes.getAttribute('data-cost');
 
-checkbox.addEventListener('click', e => {
-  const click = e.target;
-  for (let i = 0; i < checkbox.length; i++) {
-    console.log(checkbox[i])
+activities.addEventListener('change', e => {
+  const clicked = e.target;
+  for (let i = 0; i < checkboxes.length; i++) {
+      const checkedType = clicked.getAttribute('data-day-and-time');
+      console.log(checkedType)
+      if(checkBoxDate === checkedType) {
+        console.log(true);
+      }
   }
-})
+});
