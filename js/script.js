@@ -73,17 +73,16 @@ for (let i = 0; i < colors.length; i++) {
 
 //Grab checkbox element attributes
 const activities = document.querySelector('.activities');
-const checkboxes = document.querySelector('.activities input');
-const checkBoxDate = checkboxes.getAttribute('data-day-and-time');
-const checkBoxAmount = checkboxes.getAttribute('data-cost');
+console.log(activities);
+const checkboxes = document.querySelectorAll('.activities input');
+console.log(checkboxes);
 
 activities.addEventListener('change', e => {
   const clicked = e.target;
+  const checkedType = clicked.getAttribute('data-day-and-time');
   for (let i = 0; i < checkboxes.length; i++) {
-      const checkedType = clicked.getAttribute('data-day-and-time');
-      console.log(checkedType)
-      if(checkBoxDate === checkedType) {
-        console.log(true);
-      }
+    if (checkboxes[i].getAttribute('data-day-and-time') === checkedType) {
+      if(clicked.checked)
+    }
   }
 });
