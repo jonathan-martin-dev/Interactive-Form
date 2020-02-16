@@ -82,7 +82,11 @@ activities.addEventListener('change', e => {
   const checkedType = clicked.getAttribute('data-day-and-time');
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].getAttribute('data-day-and-time') === checkedType) {
-      if(clicked.checked)
+      if(clicked.checked) {
+        checkboxes[i].setAttribute('disabled', true);
+      } else {
+        checkboxes[i].setAttribute('disabled', false);
+      }
     }
   }
 });
