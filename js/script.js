@@ -77,15 +77,29 @@ console.log(activities);
 const checkboxes = document.querySelectorAll('.activities input');
 console.log(checkboxes);
 
+//On checkbox select if an elements time interferes and add the total cost to the bottom of the list
 activities.addEventListener('change', e => {
   const clicked = e.target;
   const checkedType = clicked.getAttribute('data-day-and-time');
+  let checkedCost = clicked.getAttribute('data-cost');
+  let totalAmount = 0;
+  
+  if (clicked.checked) {
+    totalAmount = totalAmount += parseInt(checkedCost, 10);
+  } else {
+    totalAmount = totalAmount -= parseInt(checkedCost, 10);
+  }
+
+  console.log(totalAmount);
+  const totalCostDiv = document.querySelector('#totalCost');
+  totalCostDiv.textContent = `Total Cost: $${totalAmount}`;
+
   for (let i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].getAttribute('data-day-and-time') === checkedType) {
+    if (checkboxes[i].getAttribute('data-day-and-time') === checkedType && clicked !== checkboxes[i]) {
       if(clicked.checked) {
-        checkboxes[i].setAttribute('disabled', true);
+        checkboxes[i].disabled = true;
       } else {
-        checkboxes[i].setAttribute('disabled', false);
+        checkboxes[i].disabled = false;
       }
     }
   }
