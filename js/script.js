@@ -5,8 +5,8 @@ const setAttr = (elem, attr, name) => {
 };
 
 //Create border colors
-const borderColorWhite = (elem) => {
-  elem.style.border = '1px solid #fff';
+const borderColorGreen = (elem) => {
+  elem.style.border = '1px solid #00ab66';
 } 
 
 const borderColorRed = (elem) => {
@@ -163,14 +163,13 @@ selectPayment.addEventListener('change', e => {
 });
 
 const name = document.querySelector('#name');
-console.log(name.parentNode)
 const email = document.querySelector('#mail');
 
 const nameValidation = () => {
   const nameVal = name.value;
   console.log(nameVal);
   if (nameVal.length > 0) {
-    borderColorWhite(name);
+    borderColorGreen(name);
     return true;
   } else {
     // name.style.border = '1px solid #ff0000'
@@ -188,19 +187,34 @@ const emailValidation = () => {
   console.log(dot);
 
   if (atSymbol > 1 && dot > atSymbol + 1) {
-   borderColorWhite(email);
+   borderColorGreen(email);
    return true;
   } else {
     borderColorRed(email);
-    // email.appendChild();
+    setAttr(email, 'placeholder', 'Please Enter in a valid email address');
     return false;
   }
+}
+const activitiesContainer = document.querySelector('.activities-wrapper');
+const activityOptions = document.querySelectorAll('#activities input');
+
+const registrationValidation = () => {
+  for(let i = 0; i < activityOptions.length; i++) {
+    console.log(activityOptions[i]);
+    if(activityOptions[i].checked) {
+      return true;
+    }
+  } 
+  borderColorRed(activitiesContainer);
+  return false;
 }
 
 form.addEventListener('submit', e => {
   if(!nameValidation()) {
     e.preventDefault();
   } else if (!emailValidation()) {
+    e.preventDefault();
+  } else if (!registrationValidation()) {
     e.preventDefault();
   }
 });
