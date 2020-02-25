@@ -168,7 +168,6 @@ const email = document.querySelector('#mail');
 
 const nameValidation = () => {
   const nameVal = name.value;
-  console.log(nameVal);
   if (nameVal.length > 0) {
     borderColorGreen(name);
     return true;
@@ -184,8 +183,6 @@ const emailValidation = () => {
   const emailVal = email.value;
   const atSymbol = emailVal.indexOf('@');
   const dot = emailVal.lastIndexOf('.');
-  console.log(atSymbol);
-  console.log(dot);
 
   if (atSymbol > 1 && dot > atSymbol + 1) {
     // borderColorGreen(email);
@@ -203,7 +200,6 @@ const registrationValidation = () => {
   const activityOptions = document.querySelectorAll('#activities input');
 
   for (let i = 0; i < activityOptions.length; i++) {
-    console.log(activityOptions[i]);
     if (activityOptions[i].checked) {
       return true;
     }
