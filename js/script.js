@@ -5,13 +5,13 @@ const setAttr = (elem, attr, name) => {
 };
 
 //Create border colors
-const borderColorGreen = (elem) => {
+const borderColorGreen = elem => {
   elem.style.border = '1px solid #00ab66';
-} 
+};
 
-const borderColorRed = (elem) => {
+const borderColorRed = elem => {
   elem.style.border = '1px solid #ff0000';
-} 
+};
 
 /* Helper Functions */
 const form = document.querySelector('form');
@@ -140,6 +140,7 @@ bitcoinDiv.style.display = 'none';
 
 //Allow user to select between 3 payment options
 selectPayment.addEventListener('change', e => {
+  ccValidation(e);
   const changeOption = e.target.value;
   for (let i = 0; i < paymentOptions.length; i++) {
     if (changeOption === 'credit card') {
@@ -177,7 +178,7 @@ const nameValidation = () => {
     setAttr(name, 'placeholder', 'Please Enter in a name');
     return false;
   }
-}
+};
 
 const emailValidation = () => {
   const emailVal = email.value;
@@ -187,34 +188,64 @@ const emailValidation = () => {
   console.log(dot);
 
   if (atSymbol > 1 && dot > atSymbol + 1) {
-   borderColorGreen(email);
-   return true;
+    // borderColorGreen(email);
+    return true;
   } else {
     borderColorRed(email);
     setAttr(email, 'placeholder', 'Please Enter in a valid email address');
     return false;
   }
-}
-const activitiesContainer = document.querySelector('.activities-wrapper');
-const activityOptions = document.querySelectorAll('#activities input');
+};
 
+//Validate Registration Information
 const registrationValidation = () => {
-  for(let i = 0; i < activityOptions.length; i++) {
+  const activitiesContainer = document.querySelector('.activities-wrapper');
+  const activityOptions = document.querySelectorAll('#activities input');
+
+  for (let i = 0; i < activityOptions.length; i++) {
     console.log(activityOptions[i]);
-    if(activityOptions[i].checked) {
+    if (activityOptions[i].checked) {
       return true;
     }
-  } 
+  }
   borderColorRed(activitiesContainer);
   return false;
-}
+};
 
+//Validate Credit Card Information
+const ccValidation = e => {
+  const ccField = document.querySelector('#cc-num');
+  const ccZipCode = document.querySelector('#zip');
+  const cvv = document.querySelector('#cvv');
+  
+  if (e.target.value === 'credit card') {
+    if (ccField.value.length >= 13 && ccField.value.length <= 16) {
+      borderColorGreen(ccField);
+      return true;
+    } else if (ccZipCode.value.length === 5) {
+      borderColorGreen(ccZipCode);
+      return true;
+    } else if (cvv.value.length === 3) {
+      borderColorGreen(cvv);
+      return true;
+    } else {
+      borderColorRed(ccField);
+      borderColorRed(ccZipCode);
+      borderColorRed(cvv);
+      return false
+    }
+  }
+};
+
+//If validations do not pass, do not submit form
 form.addEventListener('submit', e => {
-  if(!nameValidation()) {
+  if (!nameValidation()) {
     e.preventDefault();
   } else if (!emailValidation()) {
     e.preventDefault();
   } else if (!registrationValidation()) {
+    e.preventDefault();
+  } else if (!ccValidation()) {
     e.preventDefault();
   }
 });
