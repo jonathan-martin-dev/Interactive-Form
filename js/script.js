@@ -6,11 +6,11 @@ const setAttr = (elem, attr, name) => {
 
 //Create border colors
 const borderColorGreen = elem => {
-  elem.style.border = '1px solid #00ab66';
+  elem.style.border = '5px solid #00ab66';
 };
 
 const borderColorRed = elem => {
-  elem.style.border = '1px solid #ff0000';
+  elem.style.border = '5px solid #ff0000';
 };
 
 /* Helper Functions */
@@ -32,15 +32,18 @@ const otherOption = document.querySelector('.is-hidden');
 otherOption.classList.remove('is-hidden');
 
 //If other is selected add a textarea box
+const fieldset = document.getElementsByTagName('fieldset')[0];
+const textArea = document.createElement('textarea');
+
 jobRoleSelect.addEventListener('change', e => {
   const selectedElement = e.target.value;
   if (selectedElement === 'other') {
-    const fieldset = document.getElementsByTagName('fieldset')[0];
-    const textArea = document.createElement('textarea');
     textArea.style.display = 'block';
     setAttr(textArea, 'id', 'other-title');
     setAttr(textArea, 'placeholder', 'Your Job Role');
     fieldset.append(textArea);
+  } else {
+    textArea.style.display = 'none';
   }
 });
 
@@ -69,6 +72,8 @@ for (let i = 0; i < colors.length; i++) {
 
     //If the design selected has a value of "js puns" then show a set of items
     if (selectDesign === 'js puns') {
+      // setAttr(selectShirtOption, 'hidden', false);
+      setAttr(cornflowerblue, 'selected', true);
       cornflowerblue.style.display = '';
       darkslategrey.style.display = '';
       gold.style.display = '';
@@ -78,6 +83,8 @@ for (let i = 0; i < colors.length; i++) {
 
       //If the design selected has a value of "heart js" then show a set of items
     } else if (selectDesign === 'heart js') {
+      // setAttr(selectShirtOption, 'hidden', false);
+      setAttr(tomato, 'selected', true);
       cornflowerblue.style.display = 'none';
       darkslategrey.style.display = 'none';
       gold.style.display = 'none';
@@ -135,12 +142,15 @@ const bitcoinDiv = document.querySelector('#bitcoin');
 //Hide "Select Payment"
 setAttr(paymentOptions[0], 'hidden', true);
 
+//Credit Card Payment Option is selected as default
+setAttr(paymentOptions[1], 'selected', true);
+
+//Hide Other Options
 payPalDiv.style.display = 'none';
 bitcoinDiv.style.display = 'none';
 
 //Allow user to select between 3 payment options
 selectPayment.addEventListener('change', e => {
-  ccValidation(e);
   const changeOption = e.target.value;
   for (let i = 0; i < paymentOptions.length; i++) {
     if (changeOption === 'credit card') {
@@ -209,16 +219,18 @@ const registrationValidation = () => {
 };
 
 //Validate Credit Card Information
-const ccValidation = e => {
+const ccValidation = () => {
+  const ccNumValidation = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
+
   const ccField = document.querySelector('#cc-num');
   const ccZipCode = document.querySelector('#zip');
   const cvv = document.querySelector('#cvv');
+
   
-  if (e.target.value === 'credit card') {
-    if (ccField.value.length >= 13 && ccField.value.length <= 16) {
+    if (ccNumValidation.test(ccField)) {
       borderColorGreen(ccField);
       return true;
-    } else if (ccZipCode.value.length === 5) {
+    }  else if (ccZipCode.value.length === 5) {
       borderColorGreen(ccZipCode);
       return true;
     } else if (cvv.value.length === 3) {
@@ -228,20 +240,31 @@ const ccValidation = e => {
       borderColorRed(ccField);
       borderColorRed(ccZipCode);
       borderColorRed(cvv);
-      return false
+      return false;
     }
-  }
+
 };
+
+const fieldSets = document.querySelectorAll('fieldset');
+console.log(fieldSets);
 
 //If validations do not pass, do not submit form
 form.addEventListener('submit', e => {
-  if (!nameValidation()) {
-    e.preventDefault();
-  } else if (!emailValidation()) {
-    e.preventDefault();
-  } else if (!registrationValidation()) {
-    e.preventDefault();
-  } else if (!ccValidation()) {
-    e.preventDefault();
+  for (let i = 0; i < fieldSets.length; i++) {
+    if (!nameValidation()) {
+      e.preventDefault();
+    }
+    
+    if (!emailValidation()) {
+      e.preventDefault();
+    }
+    
+    if (!registrationValidation()) {
+      e.preventDefault();
+    } 
+    
+    if (!ccValidation()) {
+      e.preventDefault();
+    }
   }
 });
