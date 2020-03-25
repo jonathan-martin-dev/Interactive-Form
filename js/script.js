@@ -55,45 +55,39 @@ setAttr(selectShirtOption, 'hidden', true);
 const selectColorsElement = document.querySelector('#color');
 const colors = selectColorsElement.children;
 
-//All colors options
-const cornflowerblue = document.querySelector('option[value="cornflowerblue"]');
-const darkslategrey = document.querySelector('option[value="darkslategrey"]');
-const gold = document.querySelector('option[value="gold"]');
-const tomato = document.querySelector('option[value="tomato"]');
-const steelblue = document.querySelector('option[value="steelblue"]');
-const dimgrey = document.querySelector('option[value="dimgrey"]');
-
-//Loop through all of the color options
+//Hide all colors on load
 for (let i = 0; i < colors.length; i++) {
   colors[i].style.display = 'none';
-  const selectDesign = document.querySelector('#design');
-  selectDesign.addEventListener('change', e => {
-    const selectDesign = e.target.value;
-
-    //If the design selected has a value of "js puns" then show a set of items
-    if (selectDesign === 'js puns') {
-      // setAttr(selectShirtOption, 'hidden', false);
-      setAttr(cornflowerblue, 'selected', true);
-      cornflowerblue.style.display = '';
-      darkslategrey.style.display = '';
-      gold.style.display = '';
-      tomato.style.display = 'none';
-      steelblue.style.display = 'none';
-      dimgrey.style.display = 'none';
-
-      //If the design selected has a value of "heart js" then show a set of items
-    } else if (selectDesign === 'heart js') {
-      // setAttr(selectShirtOption, 'hidden', false);
-      setAttr(tomato, 'selected', true);
-      cornflowerblue.style.display = 'none';
-      darkslategrey.style.display = 'none';
-      gold.style.display = 'none';
-      tomato.style.display = '';
-      steelblue.style.display = '';
-      dimgrey.style.display = '';
-    }
-  });
 }
+
+const selectDesign = document.querySelector('#design');
+
+//When a design is selected enable or disable certain colors
+selectDesign.addEventListener('change', e => {
+  const currentDesign = e.target.value;
+  //Loop through all of the color options after change event
+  for (let i = 0; i < colors.length; i++) {
+    //If the design selected has a value of "js puns" then show a set of items
+    if (currentDesign === 'js puns') {
+      // setAttr(selectShirtOption, 'hidden', false);
+      colors[1].style.display = '';
+      colors[2].style.display = '';
+      colors[3].style.display = '';
+      colors[4].style.display = 'none';
+      colors[5].style.display = 'none';
+      colors[6].style.display = 'none';
+      //If the design selected has a value of "heart js" then show a set of items
+    } else if (currentDesign === 'heart js') {
+      // setAttr(selectShirtOption, 'hidden', false);
+      colors[1].style.display = 'none';
+      colors[2].style.display = 'none';
+      colors[3].style.display = 'none';
+      colors[4].style.display = '';
+      colors[5].style.display = '';
+      colors[6].style.display = '';
+    }
+  }
+});
 
 //Grab checkbox element attributes
 const activities = document.querySelector('.activities');
@@ -174,7 +168,6 @@ selectPayment.addEventListener('change', e => {
 });
 
 const name = document.querySelector('#name');
-const email = document.querySelector('#mail');
 
 const nameValidation = () => {
   const nameVal = name.value;
@@ -189,13 +182,13 @@ const nameValidation = () => {
   }
 };
 
+const email = document.querySelector('#mail');
+
 const emailValidation = () => {
   const emailVal = email.value;
-  const atSymbol = emailVal.indexOf('@');
-  const dot = emailVal.lastIndexOf('.');
-
-  if (atSymbol > 1 && dot > atSymbol + 1) {
-    // borderColorGreen(email);
+  const emailRegEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (emailRegEx.test(emailVal)) {
+    borderColorGreen(email);
     return true;
   } else {
     borderColorRed(email);
@@ -204,13 +197,14 @@ const emailValidation = () => {
   }
 };
 
+const activitiesContainer = document.querySelector('.activities-wrapper');
+const activityOptions = document.querySelectorAll('#activities input');
+
 //Validate Registration Information
 const registrationValidation = () => {
-  const activitiesContainer = document.querySelector('.activities-wrapper');
-  const activityOptions = document.querySelectorAll('#activities input');
-
   for (let i = 0; i < activityOptions.length; i++) {
     if (activityOptions[i].checked) {
+      borderColorGreen(activitiesContainer);
       return true;
     }
   }
@@ -218,53 +212,74 @@ const registrationValidation = () => {
   return false;
 };
 
+//Remove all letters
+const numRegEx = /^[0-9]*$/;
+const ccField = document.querySelector('#cc-num');
+const ccZipCode = document.querySelector('#zip');
+const cvv = document.querySelector('#cvv');
 //Validate Credit Card Information
 const ccValidation = () => {
-  const ccNumValidation = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
-
+  const numRegEx = /^[0-9]*$/;
   const ccField = document.querySelector('#cc-num');
   const ccZipCode = document.querySelector('#zip');
   const cvv = document.querySelector('#cvv');
 
-  
-    if (ccNumValidation.test(ccField)) {
-      borderColorGreen(ccField);
-      return true;
-    }  else if (ccZipCode.value.length === 5) {
-      borderColorGreen(ccZipCode);
-      return true;
-    } else if (cvv.value.length === 3) {
-      borderColorGreen(cvv);
-      return true;
-    } else {
-      borderColorRed(ccField);
-      borderColorRed(ccZipCode);
-      borderColorRed(cvv);
-      return false;
-    }
+  if (
+    numRegEx.test(ccField.value) &&
+    ccField.value.length > 12 &&
+    ccField.value.length < 17
+  ) {
+    borderColorGreen(ccField);
+  } else {
+    borderColorRed(ccField);
+  }
 
+  if (ccZipCode.value.length === 5 && numRegEx.test(ccZipCode.value)) {
+    borderColorGreen(ccZipCode);
+  } else {
+    borderColorRed(ccZipCode);
+  }
+
+  if (cvv.value.length === 3 && numRegEx.test(cvv.value)) {
+    borderColorGreen(cvv);
+  } else {
+    borderColorRed(cvv);
+  }
+
+  if (
+    !numRegEx.test(ccField.value) ||
+    ccField.value.length < 12 ||
+    ccField.value.length > 16 ||
+    ccZipCode.value.length < 5 ||
+    !numRegEx.test(ccZipCode.value) ||
+    cvv.value.length < 3 ||
+    !numRegEx.test(cvv.value)
+  ) {
+    return false;
+  }
+
+  return true;
 };
-
-const fieldSets = document.querySelectorAll('fieldset');
-console.log(fieldSets);
 
 //If validations do not pass, do not submit form
 form.addEventListener('submit', e => {
-  for (let i = 0; i < fieldSets.length; i++) {
-    if (!nameValidation()) {
-      e.preventDefault();
-    }
-    
-    if (!emailValidation()) {
-      e.preventDefault();
-    }
-    
-    if (!registrationValidation()) {
-      e.preventDefault();
-    } 
-    
-    if (!ccValidation()) {
-      e.preventDefault();
-    }
+  console.log(nameValidation());
+  console.log(emailValidation());
+  console.log(registrationValidation());
+  console.log(ccValidation());
+  if (!nameValidation()) {
+    e.preventDefault();
+  }
+
+  if (!emailValidation()) {
+    e.preventDefault();
+  }
+
+  if (!registrationValidation()) {
+    e.preventDefault();
+  }
+
+  if (!ccValidation()) {
+    e.preventDefault();
   }
 });
