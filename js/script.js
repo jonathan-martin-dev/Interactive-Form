@@ -19,12 +19,13 @@ const form = document.querySelector('form');
 //Warnings
 const nameWarningDiv = document.createElement('div');
 nameWarningDiv.textContent = 'Please enter in name';
+/* */
 
 //First form field is focused on load
 const focusOnLoad = document.querySelector('#name');
 focusOnLoad.focus();
 
-//Add textfield if other option selected
+//Add text field if other option selected
 const jobRoleSelect = document.querySelector('#title');
 
 //If JavaScript is turned on other option appears on DOM
@@ -33,29 +34,24 @@ otherOption.classList.remove('is-hidden');
 
 //If other is selected add a textarea box
 const fieldset = document.getElementsByTagName('fieldset')[0];
-const textArea = document.createElement('textarea');
+const textField = document.querySelector('#other');
+textField.style.display = 'none';
 
 jobRoleSelect.addEventListener('change', e => {
   const selectedElement = e.target.value;
   if (selectedElement === 'other') {
-    textArea.style.display = 'block';
-    setAttr(textArea, 'id', 'other-title');
-    setAttr(textArea, 'placeholder', 'Your Job Role');
-    fieldset.append(textArea);
+    textField.style.display = 'block';
+    setAttr(textField, 'placeholder', 'Your Job Role');
   } else {
-    textArea.style.display = 'none';
+    textField.style.display = 'none';
   }
 });
 
-//Hide Select T-Shirt from Color Select Menu
-selectShirtOption = document.querySelector('option[value="tshirttheme"]');
-setAttr(selectShirtOption, 'hidden', true);
-
-//Set Color options to be hidden unless change event
 const selectColorsElement = document.querySelector('#color');
-const colors = selectColorsElement.children;
+const colors = document.querySelectorAll('#color option');
+setAttr(colors[0], 'hidden', true);
 
-//Hide all colors on load
+// Hide all colors on load
 for (let i = 0; i < colors.length; i++) {
   colors[i].style.display = 'none';
 }
@@ -69,7 +65,7 @@ selectDesign.addEventListener('change', e => {
   for (let i = 0; i < colors.length; i++) {
     //If the design selected has a value of "js puns" then show a set of items
     if (currentDesign === 'js puns') {
-      // setAttr(selectShirtOption, 'hidden', false);
+      setAttr(colors[1], 'selected', true);
       colors[1].style.display = '';
       colors[2].style.display = '';
       colors[3].style.display = '';
@@ -78,7 +74,7 @@ selectDesign.addEventListener('change', e => {
       colors[6].style.display = 'none';
       //If the design selected has a value of "heart js" then show a set of items
     } else if (currentDesign === 'heart js') {
-      // setAttr(selectShirtOption, 'hidden', false);
+      setAttr(colors[4], 'selected', true);
       colors[1].style.display = 'none';
       colors[2].style.display = 'none';
       colors[3].style.display = 'none';
@@ -135,9 +131,8 @@ const bitcoinDiv = document.querySelector('#bitcoin');
 
 //Hide "Select Payment"
 setAttr(paymentOptions[0], 'hidden', true);
-
-//Credit Card Payment Option is selected as default
 setAttr(paymentOptions[1], 'selected', true);
+
 
 //Hide Other Options
 payPalDiv.style.display = 'none';
@@ -217,56 +212,57 @@ const numRegEx = /^[0-9]*$/;
 const ccField = document.querySelector('#cc-num');
 const ccZipCode = document.querySelector('#zip');
 const cvv = document.querySelector('#cvv');
+
+
 //Validate Credit Card Information
+
 const ccValidation = () => {
-  const numRegEx = /^[0-9]*$/;
-  const ccField = document.querySelector('#cc-num');
-  const ccZipCode = document.querySelector('#zip');
-  const cvv = document.querySelector('#cvv');
+    if (
+      numRegEx.test(ccField.value) &&
+      ccField.value.length > 12 &&
+      ccField.value.length < 17
+    ) {
+      borderColorGreen(ccField);
+    } else {
+      borderColorRed(ccField);
+    }
 
-  if (
-    numRegEx.test(ccField.value) &&
-    ccField.value.length > 12 &&
-    ccField.value.length < 17
-  ) {
-    borderColorGreen(ccField);
-  } else {
-    borderColorRed(ccField);
-  }
+    if (ccZipCode.value.length === 5 && numRegEx.test(ccZipCode.value)) {
+      borderColorGreen(ccZipCode);
+    } else {
+      borderColorRed(ccZipCode);
+    }
 
-  if (ccZipCode.value.length === 5 && numRegEx.test(ccZipCode.value)) {
-    borderColorGreen(ccZipCode);
-  } else {
-    borderColorRed(ccZipCode);
-  }
+    if (cvv.value.length === 3 && numRegEx.test(cvv.value)) {
+      borderColorGreen(cvv);
+    } else {
+      borderColorRed(cvv);
+    }
 
-  if (cvv.value.length === 3 && numRegEx.test(cvv.value)) {
-    borderColorGreen(cvv);
-  } else {
-    borderColorRed(cvv);
-  }
+    if (
+      !numRegEx.test(ccField.value) ||
+      ccField.value.length < 12 ||
+      ccField.value.length > 16 ||
+      ccZipCode.value.length < 5 ||
+      !numRegEx.test(ccZipCode.value) ||
+      cvv.value.length < 3 ||
+      !numRegEx.test(cvv.value)
+    ) {
+      return false;
+    }
 
-  if (
-    !numRegEx.test(ccField.value) ||
-    ccField.value.length < 12 ||
-    ccField.value.length > 16 ||
-    ccZipCode.value.length < 5 ||
-    !numRegEx.test(ccZipCode.value) ||
-    cvv.value.length < 3 ||
-    !numRegEx.test(cvv.value)
-  ) {
-    return false;
-  }
-
-  return true;
+    return true;
 };
 
+const payment = document.querySelector('#payment');
+const paymentSelected = payment.value;
+console.log(paymentSelected)
 //If validations do not pass, do not submit form
 form.addEventListener('submit', e => {
   console.log(nameValidation());
   console.log(emailValidation());
   console.log(registrationValidation());
-  console.log(ccValidation());
+  // console.log(ccValidation());
   if (!nameValidation()) {
     e.preventDefault();
   }
@@ -278,8 +274,8 @@ form.addEventListener('submit', e => {
   if (!registrationValidation()) {
     e.preventDefault();
   }
-
-  if (!ccValidation()) {
+  debugger;
+  if (paymentSelected === 'credit card' && !ccValidation()) {
     e.preventDefault();
   }
 });
