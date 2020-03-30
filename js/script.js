@@ -4,10 +4,6 @@ const setAttr = (elem, attr, name) => {
   elem.setAttribute(attr, name);
 };
 
-const removeAttr = (elem, attr) => {
-  elem.removeAttribute(attr);
-};
-
 //Create border colors
 const borderColorGreen = elem => {
   elem.style.border = '5px solid #00ab66';
