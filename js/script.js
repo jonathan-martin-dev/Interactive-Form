@@ -4,6 +4,10 @@ const setAttr = (elem, attr, name) => {
   elem.setAttribute(attr, name);
 };
 
+const removeAttr = (elem, attr) => {
+  elem.removeAttribute(attr);
+};
+
 //Create border colors
 const borderColorGreen = elem => {
   elem.style.border = '5px solid #00ab66';
@@ -61,26 +65,31 @@ const selectDesign = document.querySelector('#design');
 //When a design is selected enable or disable certain colors
 selectDesign.addEventListener('change', e => {
   const currentDesign = e.target.value;
-  //Loop through all of the color options after change event
-  for (let i = 0; i < colors.length; i++) {
-    //If the design selected has a value of "js puns" then show a set of items
-    if (currentDesign === 'js puns') {
-      setAttr(colors[1], 'selected', true);
-      colors[1].style.display = '';
-      colors[2].style.display = '';
-      colors[3].style.display = '';
-      colors[4].style.display = 'none';
-      colors[5].style.display = 'none';
-      colors[6].style.display = 'none';
-      //If the design selected has a value of "heart js" then show a set of items
-    } else if (currentDesign === 'heart js') {
-      setAttr(colors[4], 'selected', true);
-      colors[1].style.display = 'none';
-      colors[2].style.display = 'none';
-      colors[3].style.display = 'none';
-      colors[4].style.display = '';
-      colors[5].style.display = '';
-      colors[6].style.display = '';
+  if (currentDesign === 'js puns') {
+    colors[4].selected = false;
+    colors[1].selected = true;
+    for (let i = 1; i < colors.length; i++) {
+      if (i < 4) {
+        colors[i].style.display = '';
+      } else {
+        colors[i].style.display = 'none';
+      }
+    }
+  } else if (currentDesign === 'heart js') {
+    colors[1].selected = false;
+    colors[4].selected = true;
+    for (let i = 1; i < colors.length; i++) {
+      if (i > 3) {
+        colors[i].style.display = '';
+      } else {
+        colors[i].style.display = 'none';
+      }
+    }
+  } else {
+    // colors[0].hidden = true;
+    for (let i = 1; i < colors.length; i++) {
+      colors[i].selected = false;
+      colors[i].style.display = 'none';
     }
   }
 });
@@ -130,10 +139,9 @@ const payPalDiv = document.querySelector('#paypal');
 const bitcoinDiv = document.querySelector('#bitcoin');
 
 //Hide "Select Payment"
-setAttr(paymentOptions[0], 'hidden', true);
-setAttr(paymentOptions[1], 'selected', true);
-
-
+paymentOptions[0].hidden = true;
+//Select Credit Card as default payment
+paymentOptions[1].selected = true;
 //Hide Other Options
 payPalDiv.style.display = 'none';
 bitcoinDiv.style.display = 'none';
@@ -213,69 +221,68 @@ const ccField = document.querySelector('#cc-num');
 const ccZipCode = document.querySelector('#zip');
 const cvv = document.querySelector('#cvv');
 
-
 //Validate Credit Card Information
 
 const ccValidation = () => {
-    if (
-      numRegEx.test(ccField.value) &&
-      ccField.value.length > 12 &&
-      ccField.value.length < 17
-    ) {
-      borderColorGreen(ccField);
-    } else {
-      borderColorRed(ccField);
-    }
+  if (
+    numRegEx.test(ccField.value) &&
+    ccField.value.length > 12 &&
+    ccField.value.length < 17
+  ) {
+    borderColorGreen(ccField);
+  } else {
+    borderColorRed(ccField);
+  }
 
-    if (ccZipCode.value.length === 5 && numRegEx.test(ccZipCode.value)) {
-      borderColorGreen(ccZipCode);
-    } else {
-      borderColorRed(ccZipCode);
-    }
+  if (ccZipCode.value.length === 5 && numRegEx.test(ccZipCode.value)) {
+    borderColorGreen(ccZipCode);
+  } else {
+    borderColorRed(ccZipCode);
+  }
 
-    if (cvv.value.length === 3 && numRegEx.test(cvv.value)) {
-      borderColorGreen(cvv);
-    } else {
-      borderColorRed(cvv);
-    }
+  if (cvv.value.length === 3 && numRegEx.test(cvv.value)) {
+    borderColorGreen(cvv);
+  } else {
+    borderColorRed(cvv);
+  }
 
-    if (
-      !numRegEx.test(ccField.value) ||
-      ccField.value.length < 12 ||
-      ccField.value.length > 16 ||
-      ccZipCode.value.length < 5 ||
-      !numRegEx.test(ccZipCode.value) ||
-      cvv.value.length < 3 ||
-      !numRegEx.test(cvv.value)
-    ) {
-      return false;
-    }
+  if (
+    !numRegEx.test(ccField.value) ||
+    ccField.value.length < 12 ||
+    ccField.value.length > 16 ||
+    ccZipCode.value.length < 5 ||
+    !numRegEx.test(ccZipCode.value) ||
+    cvv.value.length < 3 ||
+    !numRegEx.test(cvv.value)
+  ) {
+    return false;
+  }
 
-    return true;
+  return true;
 };
 
 const payment = document.querySelector('#payment');
-const paymentSelected = payment.value;
-console.log(paymentSelected)
+
+//Validate Form
+const formValidation = () => {
+  let isValid = true;
+  const nameCheck = nameValidation();
+  const emailCheck = emailValidation();
+  const registrationCheck = registrationValidation();
+  const creditCheck = ccValidation();
+  if (!nameCheck || !emailCheck || !registrationCheck) {
+    isValid = false;
+  }
+
+  if(payment.children[1].selected === true && !creditCheck) {
+    isValid = false;
+  }
+  return isValid;
+};
+
 //If validations do not pass, do not submit form
 form.addEventListener('submit', e => {
-  console.log(nameValidation());
-  console.log(emailValidation());
-  console.log(registrationValidation());
-  // console.log(ccValidation());
-  if (!nameValidation()) {
-    e.preventDefault();
-  }
-
-  if (!emailValidation()) {
-    e.preventDefault();
-  }
-
-  if (!registrationValidation()) {
-    e.preventDefault();
-  }
-  debugger;
-  if (paymentSelected === 'credit card' && !ccValidation()) {
+  if(!formValidation()) {
     e.preventDefault();
   }
 });
