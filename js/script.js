@@ -4,11 +4,12 @@ const setAttr = (elem, attr, name) => {
   elem.setAttribute(attr, name);
 };
 
-//Create border colors
+//Create border color on success
 const borderColorGreen = elem => {
   elem.style.border = '5px solid #00ab66';
 };
 
+//Create border color on failure
 const borderColorRed = elem => {
   elem.style.border = '5px solid #ff0000';
 };
