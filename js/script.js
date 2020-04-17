@@ -105,9 +105,9 @@ activities.addEventListener('change', e => {
 
   //Add or subtracts price
   if (clicked.checked) {
-    totalAmount = totalAmount += parseInt(checkedCost, 10);
+    totalAmount = totalAmount + parseInt(checkedCost, 10);
   } else {
-    totalAmount = totalAmount -= parseInt(checkedCost, 10);
+    totalAmount = totalAmount - parseInt(checkedCost, 10);
   }
 
   const totalCostDiv = document.querySelector('#totalCost');
